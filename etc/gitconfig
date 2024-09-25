@@ -1,0 +1,29 @@
+[core]
+	symlinks = false
+	autocrlf = true
+	fscache = true
+[color]
+	interactive = true
+	ui = auto
+[help]
+	format = html
+[diff "astextplain"]
+	textconv = astextplain
+[rebase]
+	autosquash = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[credential]
+	helper = manager
+[http]
+	sslBackend = openssl
+	sslCAInfo = C:/Users/Saurav/Desktop/AIML/Backup/mingw64/etc/ssl/certs/ca-bundle.crt
+[pull]
+	rebase = false
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[init]
+	defaultBranch = master
