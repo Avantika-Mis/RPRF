@@ -20,11 +20,9 @@ model = load_model()
 def load_districts():
     data = pd.read_csv(r'C:\Users\Saurav\Downloads\NNN.csv')
     data = data[['DISTRICT', 'Year', 'Actual(mm)']].dropna()
-
     # Encode DISTRICT column and create a mapping
     data['DISTRICT'] = data['DISTRICT'].astype('category')
     district_code_map = dict(enumerate(data['DISTRICT'].cat.categories))
-
     return district_code_map
 
 
@@ -34,19 +32,18 @@ district_code_map = load_districts()
 @app.route('/')
 def index():
     districts = list(district_code_map.values())  # List of actual district names
-    return render_template('index.html', districts=districts)
+    current_year = datetime.now().year  # Get the current year
+    return render_template('index.html', districts=districts, current_year=current_year)
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
     district = request.form['district']
-    date = request.form['date']
-
-    # Extract year from date input
-    year = datetime.strptime(date, '%Y-%m-%d').year
+    year = int(request.form['year'])  # Get year directly from user input
 
     # Get district code from district name (reverse mapping)
     district_code = {v: k for k, v in district_code_map.items()}.get(district, None)
+
     if district_code is None:
         return render_template('index.html', error="Invalid district selected", districts=district_code_map.values())
 
@@ -58,14 +55,15 @@ def predict():
 
     # Provide activity recommendations based on the predicted rainfall
     if predicted_rainfall < 50:
-        recommendation = "It's a good day for an outing."
+        recommendation = "It will rain lightly, consider indoor activities."
     elif predicted_rainfall < 100:
         recommendation = "It might rain lightly, so plan outings accordingly."
     else:
-        recommendation = "Heavy rainfall predicted, good day for indoor activities or farming."
+        recommendation = "Heavy rainfall predicted, best for indoor activities or farming."
 
+    current_year = datetime.now().year  # Get the current year again for rendering
     return render_template('index.html', prediction=predicted_rainfall, recommendation=recommendation,
-                           districts=district_code_map.values())
+                           districts=district_code_map.values(), current_year=current_year)
 
 
 if __name__ == '__main__':
