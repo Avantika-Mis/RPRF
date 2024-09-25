@@ -7,7 +7,7 @@ import pickle
 
 # Load and preprocess the dataset
 def load_and_preprocess_data():
-    data = pd.read_csv(r'NNN.csv')
+    data = pd.read_csv('NNN.csv')
     # Drop unnecessary columns
     data = data[['DISTRICT', 'Year', 'Actual(mm)']].dropna()
     # Encode DISTRICT column (convert to numerical codes)
