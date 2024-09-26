@@ -18,7 +18,7 @@ model = load_model()
 
 # Load the dataset and extract the actual district names
 def load_districts():
-    data = pd.read_csv(r'C:\Users\Saurav\Downloads\NNN.csv')
+    data = pd.read_csv('NNN.csv')
     data = data[['DISTRICT', 'Year', 'Actual(mm)']].dropna()
     # Encode DISTRICT column and create a mapping
     data['DISTRICT'] = data['DISTRICT'].astype('category')
